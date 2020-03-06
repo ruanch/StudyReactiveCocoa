@@ -33,9 +33,10 @@
 
 - (RACDisposable *)schedule:(void (^)(void))block {
 	NSCParameterAssert(block != NULL);
-
+    
+    //如果当前Scheduler为空 返回也是nil
 	if (RACScheduler.currentScheduler == nil) return [self.backgroundScheduler schedule:block];
-
+    //执行block
 	block();
 	return nil;
 }

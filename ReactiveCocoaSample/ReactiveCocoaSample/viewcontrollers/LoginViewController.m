@@ -24,6 +24,7 @@
     self.loginButton.enabled = NO;
     
     //信号合并
+    //值会成为一个元组
     RACSignal *enableSingnal = [[RACSignal combineLatest:@[self.userNameLabel.rac_textSignal,self.passwordLabel.rac_textSignal]] map:^id _Nullable(RACTuple * _Nullable value) {
         NSLog(@"%@",value);
         return @([value[0] length] > 0 && [value[1] length] > 6);

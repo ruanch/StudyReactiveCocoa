@@ -32,9 +32,18 @@
     RACSignal *s2 = [self parseJSON:@"http://www.orzer.club/test.json"];
     RACSignal *s3 = [self parseJSON:@"http://www.orzer.club/test.json"];
     
-    [[[s1 merge:s2] merge:s3] subscribeNext:^(id  _Nullable x) {
+   RACDisposable *disposable = [[[s1 merge:s2] merge:s3] subscribeNext:^(id  _Nullable x) {
         NSLog(@"%@",x);
     }];
+ 
+    //这个方法是执行以下的方法体
+    /**[RACDisposable disposableWithBlock:^{
+        NSLog(@"信号量完成时需要处理的事件");
+    }];*/
+    [disposable dispose];
+    
+    
+    
     
 //    [[[s1 concat:s2] concat:s3] subscribeNext:^(id  _Nullable x) {
 //        NSLog(@"%@",x);

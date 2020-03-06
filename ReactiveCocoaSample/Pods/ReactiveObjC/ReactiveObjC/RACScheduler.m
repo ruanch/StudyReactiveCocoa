@@ -76,7 +76,8 @@ NSString * const RACSchedulerCurrentSchedulerKey = @"RACSchedulerCurrentSchedule
 + (RACScheduler *)scheduler {
 	return [self schedulerWithPriority:RACSchedulerPriorityDefault];
 }
-
+//单例创建subscriptionScheduler
+//使用RACSubscriptionScheduler子类为默认子类
 + (RACScheduler *)subscriptionScheduler {
 	static dispatch_once_t onceToken;
 	static RACScheduler *subscriptionScheduler;

@@ -139,6 +139,7 @@ static CFMutableArrayRef RACCreateDisposablesArray(void) {
 
 	BOOL shouldDispose = NO;
 
+    //线程上锁
 	pthread_mutex_lock(&_mutex);
 	{
 		if (_disposed) {

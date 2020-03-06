@@ -269,11 +269,15 @@
 	return nil;
 }
 
+//触发 block方法
 - (RACDisposable *)subscribeNext:(void (^)(id x))nextBlock {
 	NSCParameterAssert(nextBlock != NULL);
 	
+    //保存 nextBlock
 	RACSubscriber *o = [RACSubscriber subscriberWithNext:nextBlock error:NULL completed:NULL];
-	return [self subscribe:o];
+	//触发
+    //先调用底层 self.didSubscribe(subscriber) block -> 程序员写sendNext:value -> 底层nextBlock(value)
+    return [self subscribe:o];
 }
 
 - (RACDisposable *)subscribeNext:(void (^)(id x))nextBlock completed:(void (^)(void))completedBlock {

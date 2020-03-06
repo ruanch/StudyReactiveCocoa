@@ -404,13 +404,14 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 		__block id lastOtherValue = nil;
 		__block BOOL otherCompleted = NO;
 
+        //合并值
 		void (^sendNext)(void) = ^{
 			@synchronized (disposable) {
 				if (lastSelfValue == nil || lastOtherValue == nil) return;
 				[subscriber sendNext:RACTuplePack(lastSelfValue, lastOtherValue)];
 			}
 		};
-
+        //
 		RACDisposable *selfDisposable = [self subscribeNext:^(id x) {
 			@synchronized (disposable) {
 				lastSelfValue = x ?: RACTupleNil.tupleNil;
@@ -424,7 +425,7 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 				if (otherCompleted) [subscriber sendCompleted];
 			}
 		}];
-
+        //执行disposable block
 		[disposable addDisposable:selfDisposable];
 
 		RACDisposable *otherDisposable = [signal subscribeNext:^(id x) {
@@ -447,6 +448,8 @@ static RACDisposable *subscribeForever (RACSignal *signal, void (^next)(id), voi
 	}] setNameWithFormat:@"[%@] -combineLatestWith: %@", self.name, signal];
 }
 
+//合并值成元祖
+//会调用各自的dispose
 + (RACSignal *)combineLatest:(id<NSFastEnumeration>)signals {
 	return [[self join:signals block:^(RACSignal *left, RACSignal *right) {
 		return [left combineLatestWith:right];

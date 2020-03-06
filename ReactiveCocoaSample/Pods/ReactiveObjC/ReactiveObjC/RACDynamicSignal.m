@@ -40,10 +40,11 @@
 	subscriber = [[RACPassthroughSubscriber alloc] initWithSubscriber:subscriber signal:self disposable:disposable];
 
 	if (self.didSubscribe != NULL) {
-		RACDisposable *schedulingDisposable = [RACScheduler.subscriptionScheduler schedule:^{
-			RACDisposable *innerDisposable = self.didSubscribe(subscriber);
-			[disposable addDisposable:innerDisposable];
-		}];
+        RACDisposable * _Nullable extractedExpr = [RACScheduler.subscriptionScheduler schedule:^{
+            RACDisposable *innerDisposable = self.didSubscribe(subscriber);
+            [disposable addDisposable:innerDisposable];
+        }];
+        RACDisposable *schedulingDisposable = extractedExpr;
 
 		[disposable addDisposable:schedulingDisposable];
 	}
